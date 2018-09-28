@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang = "ja">
+    
+ <head>
+  <meta charset="utf-8">
+<title>私のＲａｃｋｅｔ手習い</title>
+ </head>
+
+ <body text="black" bgcolor="white">
+  <basefont size="5">
+ 
+<script type="text/javascript">
+var title1 = "私のＲａｃｋｅｔ手習い";
+var anchor1 = title1.anchor("pTop");
+document.write("<h1>",anchor1,"</h1>");
+</script>
+      
+<p>
+      <a href="index.html">戻る</a>
+    </p>
+    
+<script type="text/javascript">    
+var toAnchor2 = "シェルビンスキーのガスケット（Ｒａｃｋｅｔその１）　へ".link("#p2");
+document.write("<h2>",toAnchor2,"</h2>");
+    
+var toAnchor3 = "コッホ曲線（Ｒａｃｋｅｔその２）　へ".link("#p3");
+document.write("<h2>",toAnchor3,"</h2>");
+
+var toAnchor4 = "クイックソート（Ｒａｃｋｅｔその３）　へ".link("#p4");
+document.write("<h2>",toAnchor4,"</h2>");
+
+var toAnchor5 = "階乗のプログラム（Ｒａｃｋｅｔその４）　へ".link("#p5");
+document.write("<h2>",toAnchor5,"</h2>");
+
+var toAnchor6 = "フィボナッチ数列（Ｒａｃｋｅｔその５）　へ".link("#p6");
+document.write("<h2>",toAnchor6,"</h2>");
+
+var toAnchor7 = "ＦｉｚｚＢｕｚｚ問題（Ｒａｃｋｅｔその６）　へ".link("#p7");
+document.write("<h2>",toAnchor7,"</h2>");
+
+var toAnchor8 = "パスカルの三角形（Ｒａｃｋｅｔその７）　へ".link("#p8");
+document.write("<h2>",toAnchor8,"</h2>");
+</script>
+      
+<script type="text/javascript">
+var title2 = "シェルビンスキーのガスケット（Ｒａｃｋｅｔその１）";
+var anchor2 = title2.anchor("p2");
+document.write("<h2>",anchor2,"</h2>");
+</script>     
+ーーーーーーシェルビンスキーのガスケットーＲａｃｋｅｔその１－－－－－－<br>
+      
+以前に関数型プログラミングを少しかじったが（）の多さに辟易して挫折したことがあります。<br>
+      
+ＬＩＳＰは結構ネットで勉強しましたが、結局身につかず。<br>
+      
+今回Ｒａｃｋｅｔを少しかじってＬＩＳＰよりもなんとなく敷居が低いかもと。<br>
+      
+Ｒａｃｋｅｔのサンプルプログラムを少しずつ紹介していきます。<br>
+      
+ほとんどネットで検索したのと同じですが、実行できない場合は若干修正してあります。<br>
+      
+
+フラクタル図形のシェルピンスキーのガスケット（三角形）を描画するコードが<br>
+下記のＹｏｕｔｕｂｅで動画で説明されています。<br>
+      
+割とわかりやすいほうなので参考までに紹介します。<br>
+      
+（自分独自でプログラミングできるわけではないのですが）<br>
+実行して描けると嬉しいです。<br>
+      
+
+https://www.youtube.com/watch?v=-DTaSk5QtVk<br>
+      
+
+以下にコードを紹介します。<br>
+      
+
+(require 2htdp/image)<br>
+      
+(define serp0 (triangle 15 'solid 'green))<br>
+      
+(define (serp d)<br>
+      
+(if (zero? d) serp0<br>
+      
+(above (serp (sub1 d))<br>
+      
+(beside<br>
+      
+(serp (sub1 d))<br>
+      
+(serp (sub1 d))))))<br>
+      
+
+以上を実行してから serp0 (serp 1)とか(serp 2)などと数字を増やしていくと<br>
+      
+たくさんの三角形が描けます。<br>
+      
+（上記　(sub1 d)は　(- d 1) と同じでｄの値を１ずつ減らしていく関数です。<br>
+      
+　ちなみに(add1 d)は(+ d 1)　と同じです。）<br>
+      
+
+abobe 　とか　beside　は上とか両側に図形を描く関数みたいなものですが（たぶん）<br>
+      
+ｇｏｏｇｌｅで abobe かつ　racket で検索すれば<br>
+Ｒａｃｋｅｔのドキュメンテーションに載っています。（英文ですが）<br>
+<img src="sheru.gif" id="mImg" width="500"
+		 height="400" alt="イメージのテスト">;
+      
+<script type="text/javascript">
+var title3 = "コッホ曲線（Ｒａｃｋｅｔその２）";
+var anchor3 = title3.anchor("p3");
+document.write("<h2>",anchor3,"</h2>");
+</script> 
+ーーーーーーコッホ曲線ーRacketその２－－－－－－<br>
+      
+フラクタル図形のコッホ曲線の描画のプログラムをネットで見つけましたので、紹介します。<br>
+      
+（若干修正してあります）<br>
+      
+(require picturing-programs)<br>
+(let koch ([d 3])<br>
+(cond<br>
+((zero? d)<br>
+ (line 10 0 "black"))<br>
+[else(beside/align<br>
+      "bottom"<br>
+      (koch (- d 1))<br>
+      (rotate 60 (koch (- d 1)))<br>
+      (rotate -60 (koch (- d 1)))<br>
+      (koch (- d 1)))]))<br>
+
+上記の(let koch ([d 3]) の3を４とか５に変えればより深度の大きいフラクタル図形になります。<br>
+
+<img src="kocho.gif" id="m2Img" width="500"
+		 height="400" alt="イメージのテスト">;
+
+      <script type="text/javascript">
+var title4 = "クイックソート（Ｒａｃｋｅｔその３）";
+var anchor4 = title4.anchor("p4");
+document.write("<h2>",anchor4,"</h2>");
+</script>
+ーーーーーークイックソート（Ｒａｃｋｅｔその３）－－－－－－<br>
+      
+クイックソートのプログラムを紹介します。<br>
+ 出典は次のサイトです。<br>
+ http://ssh-2014.melt.kyutech.ac.jp/<br>
+<br>
+<pre>
+<font size=5>
+(define qsort<br>
+(lambda (xs)<br>
+(cond<br>
+  ((null? xs) null)<br>
+  (else<br>
+   (append<br>
+    (qsort (filter (lambda (x)(< x (car xs))) xs))<br>
+
+    (filter (lambda (x)(= x (car xs))) xs)<br>
+
+    (qsort (filter (lambda (x) (> x (car xs))) xs)))))))<br>
+
+</font>
+</pre>
+<br>
+上記を実行してから<br>
+（エラーが出たら言語の選択でｂｅｇｉｎｉｎｇ　ｓｔｕｄｅｔから<br>
+ａｄｖａｎｃｅｄ　ｓｔｕｄｅｎｔ　に変更します）<br>
+そして、<br>
+(qsort '( 3 2 1 6 5 9 4 0 ))　<br>
+を実行するとリストの中がソートされます。<br>
+
+<script type="text/javascript">
+var title5 = "階乗のプログラム（Ｒａｃｋｅｔその４）";
+var anchor5 = title5.anchor("p5");
+document.write("<h2>",anchor5,"</h2>");
+</script>
+ーーーーーー階乗のプログラム（Ｒａｃｋｅｔその４）－－－－－－<br>
+      
+階乗のプログラムをＲａｃｋｅｔで作ってみました。<br>
+ネットで検索すると再帰を使うと大体次のようなふうになります。<br>
+<br>      
+<pre>
+<font size=5>
+
+(define<br> 
+  (fact n)<br>
+    (cond <br>
+　    ((zero? n) 1)<br>
+      (else (* n (fact (- n 1))))))<br>
+</font>
+</pre>
+<br>
+      
+普通は、Ｒａｃｋｅｔでは代入を使わないので、ｆｏｒ文は必要でないということみたいですが、<br>
+あえて手続き型言語みたいにＲａｃｋｅｔでつくると次のようになりました。<br>
+<br>
+<pre>
+<font size=5>
+
+(define a 1)<br>
+(define (fact-list-for n)<br>
+(for ([i n])<br>
+(set! i (+ i 1))<br>
+
+(display i)<br>
+
+(set! a (* a i))<br>
+
+(display "  ")<br>
+
+(display a)<br>
+
+(display "\n")))<br>
+
+(fact-list-for 10)<br>
+</font>
+</pre>
+<br>
+      
+関数型言語であるＲａｃｋｅｔでは、<br>
+このプログラムは泥臭いのでこういうふうにつくってはいけないのですが、<br>
+練習のために挑戦してみました。<br>
+（結構時間がかかりました。また、Ｄｒｒａｃｋｅｔでは動きませんので、<br>
+Ｒａｃｋｅｔに張り付けてやっと動きました。）<br>
+ｉｆ文を使っても作れるのかな、つくれないのかなと考えています。      <br>
+<script type="text/javascript">
+var title6 = "フィボナッチ数列（Ｒａｃｋｅｔその５）";
+var anchor6 = title6.anchor("p6");
+document.write("<h2>",anchor6,"</h2>");
+</script>
+ーーーーーーフィボナッチ数列（Ｒａｃｋｅｔその５）－－－－－－<br>
+      
+フィボナッチ数列のシンプルなサンプルプログラムを紹介します。<br>
+<pre>
+<font size=5>
+
+(define (fib n)<br>
+  (fib-iter 1 0 n))<br>
+
+(define (fib-iter a b c)<br>
+    (if (= c 0)<br>
+        b<br>
+        (fib-iter (+ a b) a (- c 1))))<br>
+</font>
+</pre>
+<br>
+上記を実行してから<br>
+(fib 1)　　→　１<br>
+(fib 2)　　→　１<br>
+(fib 3)　　→　２<br>
+(fib 4)   →　３<br>
+(fib 5)   →　５　　<br>　　
+などと実行します。<br>
+<br>
+      
+〇もうひとつフィボナッチ数列のサンプルプログラムを
+「素数夜曲」（吉田　武　著）から<br>
+<pre>
+<font size=5>
+
+(require (lib "1.ss" "srfi")) <br>
+
+(define (fib n)<br>
+  (cond ((= n 0) 0)<br>
+        ((= n 1) 1)<br>
+        (else (+ (fib (- n 1)) (fib (- n 2))))))<br>
+</font>
+</pre>
+<br>
+以上を実行してから<br>
+
+(map fib(iota 16))<br>
+
+を実行すると<br>
+      
+(list 0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610)
+<br>
+      
+<script type="text/javascript">
+var title7 = "ＦｉｚｚＢｕｚｚ問題（Ｒａｃｋｅｔその６）";
+var anchor7 = title7.anchor("p7");
+document.write("<h2>",anchor7,"</h2>");
+</script>      
+ーーーーーーＦｉｚｚＢｕｚｚ問題（Ｒａｃｋｅｔその６）－－－－－－<br>
+      
+FizzBuzz問題という有名なプログラミングの問題があります。<br>
+      
+私も最近ネットで知ったのですが、次のサイトにシンプルなＲａｃｋｅｔのコードがありましたので紹介します。<br>
+
+https://news.ycombinator.com/item?id=8447761<br>
+<pre>
+<font size=5>
+
+(define (fizz-buzz n)<br>
+      (match (list (modulo n 3) (modulo n 5))<br>  
+          [(list 0 0) "FizzBuzz"]<br>
+          [(list 0 _) "Fizz"]<br>
+          [(list _ 0) "Buzz"]<br>
+          [_          n]))<br>
+    
+    (for [(i (range 100))]<br>
+      (displayln (fizz-buzz i)))<br>
+</font>
+</pre>
+<br>
+実行結果は次のようになります。<br>
+１から１００まで数えて、<br>
+３の倍数の時は　Ｆｉｚｚ　と応答し<br>
+５の倍数の時は　Ｂｕｚｚ　と応答し<br>
+３の倍数でもあり５の倍数でもあるときは　ＦｉｚｚＢｕｚｚ　と応答し<br>
+その他の時は　　そのまま　応答します。<br>
+
+FizzBuzz<br>
+1<br>
+2<br>
+Fizz<br>
+4<br>
+Buzz<br>
+Fizz<br>
+7<br>
+8<br>
+Fizz<br>
+Buzz<br>
+11<br>
+Fizz<br>
+13<br>
+14<br>
+FizzBuzz<br>
+16<br>
+17<br>
+
+<script type="text/javascript">
+var title8 = "パスカルの三角形（Ｒａｃｋｅｔその７）";
+var anchor8 = title8.anchor("p8");
+document.write("<h2>",anchor8,"</h2>");
+</script> 
+ーーーーーーパスカルの三角形（Ｒａｃｋｅｔその７）－－－－－－<br>
+      
+「素数夜曲ー女王陛下のＬＩＳＰ」（吉田　武　著）という本があります。<br>
+ページが多くて重たいですが、最後の方に載っているカラーの作図が魅力的な本です。<br>
+また、帯にある「独学とは再帰なり」（壮大な附録と共に独学の書復活）という言葉にひかれて５年ほど前に購入しました。<br>
+　いつかはこんな描画ができたらなあと思っていましたが、最初に　Gauche　で始めたのがいけなかったのか、<br>
+開発環境を整えるのに挫折してしまいました。<br>
+というか、今にして思えば、ネットでフリーソフトをダウンロードする、<br>
+それも英語のページからというのに慣れていなくて、<br>
+パスの通し方がわからないとか、パソコンの基礎がなかったのだと思います。　<br>
+ その後 Racket を学ぶ機会があったので、今回初めて腰をすえて取り組みました。<br>
+      
+（全部はとても読めませんので、掲載されているカラーの作図<br>
+ーパスカルの三角形と循環小数の可視化及びその周辺に限りました。）<br>
+
+　以下は、私のＲａｃｋｅｔプログラム習作です。<br>
+内容は、パスカルの三角形を剰余で分類して色わけするプログラム（Ｒａｃｋｅｔ）です。<br>
+「素数夜曲」のＤ．6<br>
+「パスカルの三角形と剰余」とほぼ同じです。<br>
+文字どおり習作で、私のオリジナルなものはほとんどありませんが、<br>
+gnuplot　で描画ができてうれしかったのでまとめておきます。<br>
+<br>
+（１）階乗のプログラム(n!=n*(n-1)*(n-2)*・・3*2*1)<br>
+
+<br>
+<pre>
+      
+(require (lib "1.ss" "srfi"))<br>
+
+(define (fact n)<br>
+  (cond<br>
+    ((zero? n) 1)<br>
+    (else (* n (fact (- n 1))))))<br>
+</pre>
+<br>
+      
+（実行例）<br>
+>(fact 0)<br>
+1<br>
+> (fact 1)<br>
+1<br>
+> (fact 2)<br>
+2<br>
+> (fact 3)<br>
+6<br>
+> (fact 4)<br>
+24<br>
+> (fact 5)<br>
+120<br>
+<br>
+（２）二項係数(binomial coefficients) (nCr=n!/(r! (n-r)!)<br>
+<br>
+<pre>
+(define (bc n r)<br>
+  (/ (fact n) (* (fact r) (fact (- n r)))))<br>
+</pre>
+<br>
+      
+（実行例）(a + b)の3乗　1*(a^3) + 3*(a^2*b) + 3*(a*b^2) + 1*(b^3)の各係数<br>
+ (bc 3 0)<br>
+1<br>
+> (bc 3 1)<br>
+3<br>
+> (bc 3 2)<br>
+3<br>
+> (bc 3 3)<br>
+1<br>
+<br>
+      
+（３）パスカルの三角形の第（ｎ＋１）行の列<br>
+<br>
+(define (row n)<br>
+  (map (lambda (x)(bc n x))(iota (+ n 1) 0 1)))<br>
+
+（実行例）<br>
+> (row 3)<br>
+'(1 3 3 1)<br>
+> (row 4)<br>
+'(1 4 6 4 1)<br>
+<br>
+      
+（４）パスカルの三角形（リストの形）<br>
+<br>
+(define (pascal n)<br>
+  (map (lambda (x) (row x)) (iota (+ n 1) 0 1)))<br>
+<br>
+      
+（実行例）<br>
+> (pascal 5)<br>
+((1) (1 1) (1 2 1) (1 3 3 1) (1 4 6 4 1) (1 5 10 10 5 1))<br>
+<br>
+      
+（５）出力形式（縦列の形）<br>
+<br>
+<pre>
+(define (output lst)<br>
+  (let loop ((i 0)) (newline)<br>
+      (if (= i (length lst))<br>
+          'end<br>
+          (begin (display (list-ref lst i))<br>
+                 (loop (+ i 1)) ))))<br>
+</pre>
+<br>
+（実行例）<br>
+> (output (pascal 5))<br>
+
+(1)<br>
+(1 1)<br>
+(1 2 1)<br>
+(1 3 3 1)<br>
+(1 4 6 4 1)<br>
+(1 5 10 10 5 1)<br>
+'end<br>
+<br>
+（６）剰余によって分類<br>
+<br>
+(define (row-mod n m)<br>
+   (map (lambda (x) (modulo x m)) (row n)))<br>
+(define (pas-mod n m)<br>
+  (map (lambda (x) (row-mod x m)) (iota (+ n 1) 0 1)))<br>
+<br>
+（実行例）<br>
+> (row 3)<br>
+'(1 3 3 1)<br>
+> (row-mod 3 3)<br>
+'(1 0 0 1)<br>
+> (row 4)<br>
+'(1 4 6 4 1)<br>
+> (row-mod 4 3)<br>
+'(1 1 0 1 1)<br>
+
+> (output (pas-mod 5 3))<br>
+
+(1)<br>
+(1 1)<br>
+(1 2 1)<br>
+(1 0 0 1)<br>
+(1 1 0 1 1)<br>
+(1 2 1 1 2 1)<br>
+<br>
+（７）各段の係数の位置座標を定める<br>
+剰余の値によって色の塗分けをする。<br>
+そのための準備として、まず係数が配置される座標を決める。<br>
+ｘｙにおける座標系の原点（０，０）に、三角形の頂点をとる。<br>
+全体は下向きで、ｙの座標値はすべてマイナスになる。<br>
+ｘ座標軸における各係数の間隔はすべて２とする。<br>
+<br>
+<pre>
+(define (tri-n n)<br>
+  (let ((y (* -1 n)))<br>
+    (map (lambda (x) (list x y)) (iota (+ n 1) y 2))))<br>
+</pre>
+<br>
+<br>
+（実行例）<br>
+> (tri-n 0)<br>
+'((0 0))<br>
+> (tri-n 1)<br>
+'((-1 -1) (1 -1))<br>
+> (tri-n 2)<br>
+'((-2 -2) (0 -2) (2 -2))<br>
+> (tri-n 3)<br>
+'((-3 -3) (-1 -3) (1 -3) (3 -3))<br>
+<br>
+      
+（８）位置座標と剰余の２つの要素を１つのリストにする<br>
+（実行例）<br>
+> (mod-xy 0 2)<br>
+'((0 0 1))(define (mod-xy n m)<br>
+  (map flatten<br>
+       (map list (tri-n n) (row-mod n m))))<br>
+
+(define (plot-data n m)<br>
+  (apply append<br>
+         (map (lambda (x) (mod-xy x m)) (iota (+ n 1) 0 1))))<br>
+
+
+> (mod-xy 1 2)<br>
+'((-1 -1 1) (1 -1 1))<br>
+> (mod-xy 2 2)<br>
+'((-2 -2 1) (0 -2 0) (2 -2 1))<br>
+> (mod-xy 3 2)<br>
+'((-3 -3 1) (-1 -3 1) (1 -3 1) (3 -3 1))<br>
+
+> (plot-data 3 2)<br>
+'((0 0 1)<br>
+  (-1 -1 1)<br>
+  (1 -1 1)<br>
+  (-2 -2 1)<br>
+  (0 -2 0)<br>
+  (2 -2 1)<br>
+  (-3 -3 1)<br>
+  (-1 -3 1)<br>
+  (1 -3 1)<br>
+  (3 -3 1))<br>
+
+<br>
+（７）描画ソフト（ｇｎｕｐｌｏｔ）への対応<br>
+上で得られたデータを読み込み、その値に画素を対応させる。<br>
+描画ソフトgnuplotに対応させるため、データのブロック化をする。<br>
+そのため、同じ剰余を持つ座標値をまとめる。<br>
+<br>
+<pre>
+(define (key-1 obj lst)<br>
+  (let loop ((lst lst) (tmp '()))<br>
+  (cond ((null? lst) tmp)<br>
+        ((equal? (caddar lst) obj)<br>
+         (loop (cdr lst) (cons (car lst) tmp)))<br>
+        (else (loop (cdr lst)            tmp)))))<br>
+
+(define (extreme lst)<br>
+  (map (lambda (x) (list (apply min x) (apply max x)))<br>
+       (apply map list lst)))<br>
+
+(define (build n m)<br>
+  (let* ((lst (plot-data n m))<br>
+              (min-v (car (list-ref (extreme lst) 2)))<br>
+              (max-v (cadr (list-ref (extreme lst) 2)))<br>
+              (LF '()))<br>
+         (let loop ((k min-v) (tmp '()))<br>
+           (cond ((< max-v k) (reverse tmp))<br>
+                 (else (loop (+ k 1)<br>
+                             (cons LF (append (key-1<br> k lst) <br>tmp))))))))<br>
+</pre>
+<br>
+ gnuplotが空行を目印にデータを１つのブロックとして認識するのに対応して<br>
+１つのブロック毎にＬＦの名前で空リストを挿入している。<br>
+
+<br>　
+（実行例）<br>
+> (key-1 0 (plot-data 3 2))<br>
+'((0 -2 0))<br>
+> (key-1 1 (plot-data 3 2))<br>
+'((3 -3 1)<br>
+  (1 -3 1)<br>
+  (-1 -3 1)<br>
+  (-3 -3 1)<br>
+  (2 -2 1)<br>
+  (-2 -2 1)<br>
+  (1 -1 1)<br>
+  (-1 -1 1)<br>
+  (0 0 1))<br>
+<br>
+　以上を組み合わせて、剰余の小さい順にリストを再構成する。<br>
+ > (build 3 2)<br>
+'((0 -2 0)<br>
+  ()<br>
+  (0 0 1)<br>
+  (-1 -1 1)<br>
+  (1 -1 1)<br>
+  (-2 -2 1)<br>
+  (2 -2 1)<br>
+  (-3 -3 1)<br>
+  (-1 -3 1)<br>
+  (1 -3 1)<br>
+  (3 -3 1)<br>
+  ())<br>
+                            
+<br>
+（８）ファイル出力<br>
+<pre>
+(define (read-file file-name)<br>
+  (let ((p (open-input-file file-name)))<br>
+    (let loop((ls1 '())(c (read-char p)))<br>
+      (if (eof-object? c)<br>
+          (begin<br>
+            (close-input-port p)<br>
+            (list->string (reverse ls1)))<br>
+          (loop (cons c ls1) (read-char p))))))<br>
+(define (status name)<br>
+  (string-append "C:\\Users\\user\\Desktop\\bit-racket\\"<br>
+    (symbol->string name)))<br>
+(define (save->file name proc)<br>
+  (call-with-output-file (status name) (lambda (x) (write proc x))) 'ok)<br>
+(define (save->data name proc  opt)<br>
+  (define (nl-add lst x)<br>
+    (let* ((fn0 (lambda (k) (list-ref lst k)))<br>
+           (fn1 (lambda (y) (write y x)<br>
+                  (write-char #\space x)))<br>
+           (store (lambda (z)<br>
+                    (if (and (null? opt) (list? (fn0 z)))<br>
+                        (map fn1 (fn0 z))<br>
+                        (write   (fn0 z) x)))))<br>
+      (let loop ((i 0))<br>
+        (cond ((= i (length lst)) 'ok)<br>
+              (else (store i) (newline x) (loop (+ i 1))) ))))<br>
+  (call-with-output-file (status name) (lambda (x) (nl-add proc x))))<br>
+(save->data 'pascal3.dat (build 63 3) '())<br>
+</pre>
+<br>
+データが２重のリストの場合、引数　opt の入力の有無によって分岐する。<br>
+opt が　null の場合には、内部のリストも外し、空白の分離記号とする裸のデータを、<br>
+内部リストを単位として、改行を加えて保存する。<br>
+<br>
+      
+（９）ｇｎｕｐｌｏｔのコマンド<br>
+set size ratio 0.87<br>
+unset border<br>
+unset key<br>
+unset tics<br>
+set style line 1 pt 7 lc rgb "white"<br>
+set style line 2 pt 7 lc rgb "yellow"<br>
+set style line 3 pt 7 lc rgb "green"<br>
+plot 'pascal3.dat' using 1:2 every :::0::0 with<br> points ls 1,\<br>
+ 'pascal3.dat' using 1:2 every :::1::1 with points ls 2,\<br>
+'pascal3.dat' using 1:2 every :::2::2 with points ls 3 <br>
+
+<img src="pascal1.gif"
+border="0">
+      
+      </body>
+     </html>
+    
