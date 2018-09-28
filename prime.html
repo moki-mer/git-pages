@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang = "ja">
+    
+ <head>
+  <meta charset="utf-8">
+<title>素数雑記ーＲａｃｋｅｔを使って</title>
+ </head>
+
+ <body text="green" bgcolor="white">
+  <basefont size="5">
+
+<script type="text/javascript">
+var title1 = "素数雑記ーＲａｃｋｅｔを使って";
+var anchor1 = title1.anchor("pTop");
+document.write("<h1>",anchor1,"</h1>");
+</script>
+<p>
+      <a href="index.html">戻る</a>
+    </p>
+      
+<script type="text/javascript">    
+var toAnchor8 = "Ｒａｃｋｅｔの素数生成プログラムへ".link("#p8");
+document.write("<h2>",toAnchor8,"</h2>");
+    
+var toAnchor7 = "エラトステネスのふるいへ".link("#p7");
+document.write("<h2>",toAnchor7,"</h2>");
+
+var toAnchor9 = "完全数その１　へ".link("#p9");
+document.write("<h2>",toAnchor9,"</h2>");
+    
+var toAnchor6 = "メルセンヌ素数へ".link("#p6");
+document.write("<h2>",toAnchor6,"</h2>");
+
+var toAnchor10 = "完全数その２　へ".link("#p10");
+document.write("<h2>",toAnchor10,"</h2>");
+
+var toAnchor5 = "双子素数へ".link("#p5");
+document.write("<h2>",toAnchor5,"</h2>");
+
+var toAnchor4 = "三つ子素数へ".link("#p4");
+document.write("<h2>",toAnchor4,"</h2>");
+    
+var toAnchor3 = "フェルマー素数へ".link("#p3");
+document.write("<h2>",toAnchor3,"</h2>");
+    
+var toAnchor1 = "セクシー素数へ".link("#p1");
+document.write("<h2>",toAnchor1,"</h2>");
+
+var toAnchor2 = "４ｎ＋１型素数へ".link("#p2");
+document.write("<h2>",toAnchor2,"</h2>");
+
+</script>
+<br>
+<br>
+      
+<script type="text/javascript">
+var title8 = "Ｒａｃｋｅｔの素数生成プログラム";
+var anchor8 = title8.anchor("p8");
+document.write("<h2>",anchor8,"</h2>");
+</script>       
+ーーーーーーＲａｃｋｅｔの素数生成プログラムーーーーーー<br>
+Ｒａｃｋｅｔの素数の生成プログラムは、Ｒａｃｋｅｔの数の理論のライブラリに、<br>
+素数判定の関数が用意されているためある意味簡単です。<br>
+（それにたどり着くまでに時間がかかりましたが。）<br>
+
+Ｒａｃｋｅｔドキュメンテーションにより次のコードが見つかりました。<br>
+<br>
+(require math/number-theory)<br>
+(filter prime? (range 1 100 1))<br>
+<br>
+実行結果は次のようになります。<br>
+<br>
+(list 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)
+<br>
+<br>      
+１００までの素数ならすぐに実行してもらえますが、１００万までの素数を実行させると、<br>
+メモリが足りませんと実行できませんでした。<br>
+
+ネットで検索すると素数については、たくさんの研究・資料がありました。<br>
+「エラトステネスのふるい」の方法などを使ったコードもありますが、<br>
+私には少しむずかしく感じられました。<br>
+
+<script type="text/javascript">
+var title7 = "エラトステネスのふるい";
+var anchor7 = title7.anchor("p7");
+document.write("<h2>",anchor7,"</h2>");
+</script>     
+ーーーーーーエラトステネスのふるいーーーーーー<br>      
+エラトステネスのふるいのＲａｃｋｅｔのシンプルなプログラムを<br>
+見つけましたので紹介します。<br>
+参考にしたのは以下のサイトです。<br>
+
+http://yoshiiz.blog129.fc2.com/blog-entry-391.htm<br>
+      
+コードは次のようになります。<br>
+<br>
+<pre>
+<font size= 5>
+
+(require (lib "1.ss" "srfi"))<br>
+(define notMultiple?<br>
+　(lambda (p)<br>
+　　(lambda (x) (not (zero? (modulo x p))))))<br>
+
+(define sieve<br>
+　(lambda (ls)<br>
+　　(if (null? ls)<br>
+　　　 '() <br>
+　　   (cons (car ls) (filter (notMultiple? (car ls))<br>
+　　　　　　　　　 　　　　      (sieve (cdr ls)))))))<br>
+
+(define (eratosthenes n)<br>
+　　(display  (sieve (iota (- n 1) 2 1))))<br>
+</font>
+</pre>
+<br>
+以上を実行してから<br>
+(eratosthenes 100)　を実行すると<br>
+<br>
+(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)<br>
+<br>
+１００までの素数のリストが求まります。<br>
+
+（注）
+sieve は　ふるい　の意味です。<br>
+n を　たとえば　１００　とすると<br>
+(iota 99 2 1)は<br>
+
+(2 3 4 5 6 ～　98 99)　　になります。
+      <br>
+(iota 項数　初項　等差)です。<br>
+(sieve (iota 99 2 1)) で１００までの素数リストができます。<br>
+      
+最初に　２の倍数を消して、次に３の倍数を消してとやっていくのですが、<br>
+      
+５０以上はやる必要がありませんので、<br>
+このプログラムは効率が悪いのですが、シンプルでなんとなく分かるコードで好きです。<br>
+（もっと効率を求めると　ルート１００以上はチェックする必要がありません。<br>
+　そういったテクニックをやらない分、紹介したコードはシンプルなのだと思います。）<br>　
+
+<script type="text/javascript">
+var title9 = "完全数その１";
+var anchor9 = title9.anchor("p9");
+document.write("<h2>",anchor9,"</h2>");
+</script>
+
+ーーーーーー完全数その１ーーーーーー<br>
+      
+完全数について（及び完全数を作成するために使うメルセンヌ素数について）<br>
+Ｒａｃｋｅｔを使ってあれこれ試してみました。<br>
+参考サイトは以下です。<br>
+
+http://d.hatena.ne.jp/tanakaBox/20080409/1207743974<br>
+
+完全数は以下のリストです。<br>
+<br>
+      
+(list 6 28 496 8128 33550336 8589869056 137438691328)<br>
+      
+例えば　第１項の６の場合は、約数が１、２，３なので全部足すと６です。（１も入れます）<br>
+6 は完全数です。<br>
+      
+例えば　第２項の２８の場合は、約数が　１、２，４，７，１４なので全部足すと２８になります。<br>
+28 は完全数です。
+
+約数をリストとしてあげる関数divisorsがＲａｃｋｅｔに用意されています。<br>
+例えば　４９６の場合にＲａｃｋｅｔを使って約数をリストアップするには<br>
+<br>
+ (divisors 496) <br>
+を実行すると<br>
+<br>
+(list 1 2 4 8 16 31 62 124 248 496)<br>
+
+となります。<br>
+divisors は　１とその数自身もリストアップされます。<br>
+
+(sum 0 (divisors 496))<br>
+とリストアップされた約数を全部足すと992  となります。<br>
+（496自身も足していますので992から496を引くと496になります。<br>
+496 も完全数でした。<br>
+<br>
+      
+次の ８１２８　もやってみます。<br>  
+(divisors 8128)<br>
+(list 1 2 4 8 16 32 64 127 254 508 1016 2032 4064 8128)<br>
+> (sum 0 (divisors 8128))<br>
+16256<br>
+
+８１２８も完全数です。<br>
+<br>
+
+ 
+（コードは以下のとおりです。)<br>
+<pre>
+<font size =5>
+(require (lib "1.ss" "srfi"))  <br>
+(require math/number-theory)<br>
+
+(filter prime? (iota (- 20 1) 2))<br>
+　　→→(list 2 3 5 7 11 13 17 19)<br>
+
+(map (lambda (n)<br>
+       (- (expt 2 n) 1))<br>
+     (filter prime? (iota (- 20 1) 2)))<br>
+　　　→→(list 3 7 31 127 2047 8191 131071 524287)<br>
+</font>
+</pre>
+<br>
+(list 3 7 31 127 2047 8191 --)　をメルセンヌ数といいます。<br>
+この中で素数の場合はメルセンヌ素数といいます。<br>
+メルセンヌ数の　２０４７　は素数ではありません。<br>
+<br>
+    (divisors 2047)<br>
+    (list 1 23 89 2047)<br>
+    となり２０４７＝２３×８９<br>
+<br>      
+<pre>
+(map (lambda (n)<br>
+       (* n (+ n 1) 1/2))<br>
+     (filter prime?<br>
+             (map (lambda (n)<br>
+                    (- (expt 2 n) 1))<br>
+                  (filter prime? (iota (- 20 1) 2)))))<br>
+</pre>
+<br>
+上記の(filter prime? (map (lambda (n) (- (expt 2 n) 1)(filter prime? (iota    略))))) は<br>
+ (list 3 7 31 127 8191 131071 524287)になります。<br>
+（メルセンヌ素数）<br>
+
+<br>
+余談ですが、
+ｎがメルセンヌ素数のとき（ｎ＝２＾ｐ－１）<br>
+（ｎ　＋　１）×　ｎ/2＝2^(p-1) *(2^p -1)<br>
+は完全数であることが証明されます。（ユークリッド）<br>　 
+
+<br>
+（注）(sum 0 ls)は以下のコードです。<br>
+      
+<pre>
+(define sum<br>
+  (lambda (a ls)<br>
+    (cond<br>
+      ((null? ls) a)<br>
+      (else (sum (+ (car ls) a) (cdr ls))))))<br>
+</pre>
+
+<script type="text/javascript">
+var title6 = "メルセンヌ素数";
+var anchor6 = title6.anchor("p6");
+document.write("<h2>",anchor6,"</h2>");
+</script>
+ーーーーーーメルセンヌ素数ーーーーーー<br>      
+メルセンヌ素数のリストをつくります。<br>
+<br>
+<pre><font size=5>
+(require (lib "1.ss" "srfi"))<br>  
+(require math/number-theory)<br>
+
+(define (M_n p)<br>
+  (- (expt 2 p) 1))<br>
+
+(define (prime-list n)<br>
+  (filter prime? (iota (- n 1) 2)))<br>
+
+(define (fact-mer n)<br>
+ (for ([i (prime-list n)])<br>
+  (cond<br>
+    [(prime? (M_n i))<br>
+    (display (list i (M_n i)))])))<br>
+
+</font>
+</pre>
+<br>
+(prime-list 200)<br>
+      
+で２から200までの素数のリストをつくります。<br>
+そして、素数ｐから　２のｐ乗マイナス１でメルセンヌ数をつくります。<br>
+それから、そのつくったメルセンヌ数の中から素数のものをリストアップします。<br>
+
+(fact-mer 200)<br>
+を実行すると次の結果が得られます。<br>
+<br>
+(2 3)<br>
+(3 7)<br>
+(5 31)<br>
+(7 127)<br>
+(13 8191)<br>
+(17 131071)<br>
+(19 524287)<br>
+(31 2147483647)<br>
+(61 2305843009213693951)<br>
+(89 618970019642690137449562111)<br>
+(107 162259276829213363391578010288127)
+(127 170141183460469231731687303715884105727)<br>
+<br>      
+<script type="text/javascript">
+var title10 = "完全数その２";
+var anchor10 = title10.anchor("p10");
+document.write("<h2>",anchor10,"</h2>");
+</script>      
+ーーーーーー完全数（その２）－－－－－－<br>      
+前回、メルセンヌ素数から完全数を作る方法で、完全数をリストアップしたが、<br>
+      
+メルセンヌ素数とは関係なく完全数を見つける愚直な方法でプログラムを作ってみました。<br>
+（サイトで完全数を検索すると、メルセンヌ素数と関係ない完全数はないらしいです。）<br>
+<br>
+<pre>
+<font size=5>
+(require (lib "1.ss" "srfi"))<br>  
+(require math/number-theory)<br>
+
+(define (comp n)<br>
+ (for ([i n])<br>
+  (cond<br>
+    [(zero? (- (* 2 i) (sum 0 (divisors i))))<br>
+     (display i)<br>
+     (display "\n")])))<br>
+
+(define sum<br>
+  (lambda (a ls)<br>
+    (cond<br>
+      ((null? ls) a)<br>
+      (else (sum (+ (car ls) a) (cdr ls))))))<br>
+</font>
+</pre>
+<br>
+以上を実行してから　(comp 100000) を実行すると<br>
+> (comp 100000)<br>
+0<br>
+6<br>
+28<br>
+496<br>
+8128<br>
+
+メルセンヌ素数から完全数を作った場合は<br>
+メルセンヌ素数　→→　(list 3 7 31 127 8191 131071 524287)<br>
+
+対応する完全数　→→　(list 6 28 496 8128 33550336 8589869056 137438691328)<br>
+
+でしたので、８１２８の次は３３５５０３３６ですので、<br>
+(comp 100000000)を実行すればよいのですが、数が大きすぎて実行してもらえません。<br>
+
+
+      
+<script type="text/javascript">
+var title5 = "双子素数";
+var anchor5 = title5.anchor("p5");
+document.write("<h2>",anchor5,"</h2>");
+</script>
+ーーーーーー双子素数ーーーーーー<br>
+      
+双子素数とは（５７）とか（１１　１３）などのように差が２であるような素数のペアのことです。<br>
+プログラムは簡単なので、実行結果を示します。<br>
+<br>
+<pre>
+<font size=5>
+(require (lib "1.ss" "srfi"))  <br>
+(require math/number-theory)<br>
+
+(define (prime-list n)<br>
+  (filter prime? (iota (- n 1) 2)))<br>
+
+(define (twin-fact n)<br>
+ (for ([i (prime-list n)])<br>
+  (cond<br>
+    [(prime? (+ i 2))<br>
+    (display (list i (next-prime i))) <br>
+    (display "\n")])))<br>
+</font>
+</pre>
+<br>
+      
+実行すると次の結果が得られます。<br>
+
+(twin-fact 100)<br>
+(3 5)<br>
+(5 7)<br>
+(11 13)<br>
+(17 19)<br>
+(29 31)<br>
+(41 43)<br>
+(59 61)<br>
+(71 73)<br>
+
+<script type="text/javascript">
+var title4 = "三つ子素数";
+var anchor4 = title4.anchor("p4");
+document.write("<h2>",anchor4,"</h2>");
+</script>
+
+ーーーーーー三つ子素数ーーーーーー<br>
+      
+三つ子素数とは（５　７　１１）とか（７　１１　１３）などの隣り合う素数の差が２か４である<br>
+３つの素数の組み合わせです。<br>
+定式化すると、ｐを素数とすると<br>
+（ｐ　ｐ＋２　ｐ＋６）か（ｐ　ｐ＋４　ｐ＋６）のいずれかの形で、３つの素数の組み合わせです。<br>
+
+ｒａｃｋｅｔのプログラムは以下になります。<br>
+      
+<br>
+<pre>
+<font size= 5>
+(require (lib "1.ss" "srfi"))<br>  
+(require math/number-theory)<br>
+
+(define (prime-list n)<br>
+  (filter prime? (iota (- n 1) 2)))<br>
+
+(define (tri-fact n)<br>
+ (for ([i (prime-list n)])<br>
+  (cond<br>
+    [(and (prime? (+ i 2))(prime? (+ i 6)))<br>
+     (display (list i (+ i 2)(+ i 6)))]<br>
+    [(and (prime? (+ i 4))(prime? (+ i 6)))<br>
+     (display (list i (+ i 4)(+ i 6)))]<br>
+    [else (display "")])))  <br>
+</font>
+</pre>
+<br>
+以上を実行してから<br>
+<br>
+(tri-fact 100)<br>
+<br>
+を実行すると次のようになります。<br>
+
+(tri-fact 100)<br>
+(5 7 11)<br>
+(7 11 13)<br>
+(11 13 17)<br>
+(13 17 19)<br>
+(17 19 23)<br>
+(37 41 43)<br>
+(41 43 47)<br>
+(67 71 73)<br>
+(97 101 103)<br>
+      
+
+<script type="text/javascript">
+var title3 = "フェルマー素数";
+var anchor3 = title3.anchor("p3");
+document.write("<h2>",anchor3,"</h2>");
+</script>      
+ーーーーーーフェルマー素数ーーーーーー<br>
+      
+メルセンヌ素数と似ていますが、フェルマー素数を取り上げます。<br>
+      
+メルセンヌ素数は、次のようになります。<br>
+      
+M_n (P) = 2^p - 1  の形で　ｐは素数で　M_n (p)　も素数の場合です。<br>
+      
+
+フェルマー素数は、次のようになります。<br>
+F_n (n) = 2^(2^n) + 1  の形で　F_n (n)　が素数のものです。<br>
+      
+Ｒａｃｋｅｔのプログラムは次のようになります。<br>
+<br>  
+      
+<pre>
+<font size=5>
+(require (lib "1.ss" "srfi")) <br> 
+(require math/number-theory)<br>
+
+(define (F_n n)<br>
+  (+ (expt 2 (expt 2 n)) 1))<br>
+
+(define (fact-fer n)<br>
+ (for ([i n])<br>
+  (display (list i (F_n i) (prime? (F_n i))))<br>
+  (display "\n")))<br>
+</font>
+</pre>
+<br>
+以上を実行してから<br>
+(fact-fer 10)を実行します。<br>
+
+>
+(fact-fer 10)<br>
+(0 3 #t)<br>
+(1 5 #t)<br>
+(2 17 #t)<br>
+(3 257 #t)<br>
+(4 65537 #t)<br>
+(5 4294967297 #f)<br>
+(6 18446744073709551617 #f)<br>
+(7 340282366920938463463374607431768211457 #f)<br>
+(8 115792089237316195423570985008687907853269984665640564039457584007913129639937 #f)<br>
+(9 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084097 #f)<br>
+>
+最初の５項のみ　３　５　１７　２５７　６５５３７　のみフェルマー素数で　#t　が表示されます。<br>
+n が５　の時の　4294967297 は素数ではなくて　#f　が表示されます。<br>
+(divisors 4294967297)<br>
+'(1 641 6700417 4294967297)<br>
+となり、641　×　6700417<br>
+と素因数分解されます。      <br>
+
+<script type="text/javascript">
+var title1 = "セクシー素数";
+var anchor1 = title1.anchor("p1");
+document.write("<h2>",anchor1,"</h2>");
+</script>      
+ーーーーーー　セクシー素数　－－－－－－<br>
+      
+  セクシー素数は差が６であるような素数のペアです。<br>
+      
+Ｒａｃｋｅｔのプログラムは以下のようになります。<br>
+      
+（今までのコードとは少し違った書き方でシンプルにしました。）<br>
+<br>
+<pre>
+<font size=5>
+
+(require math/number-theory)<br>
+      
+(define (sexy-fact n)<br>
+ (for ([i n])<br>
+  (cond<br>
+    [(and (prime?  i)(prime? (+ i 6)))<br>
+     (display (list i (+ i 6)))]<br>
+    [else (display "")])))  <br>
+</font>
+</pre>
+<br>
+      
+以上を実行してから(sexy-fact 100)　を実行します。<br>
+      
+
+> (sexy-fact 100)<br>
+      
+(5 11)<br>
+(7 13)<br>
+(11 17)<br>
+(13 19)<br>
+(17 23)<br>
+(23 29)<br>
+(31 37)<br>
+(37 43)<br>
+(41 47)<br>
+(47 53)<br>
+(53 59)<br>
+(61 67)<br>
+(67 73)<br>
+(73 79)<br>
+(83 89)<br>
+(97 103)<br>
+<br>
+      
+余談ですが、ウィキペディアで見ましたら、<br>
+セクシー素数５つ組が(5, 11, 17, 23, 29)　のただ一つ存在するそうです。<br>
+      
+セクシー素数のセクシー組（６つ組）は存在しないそうです。<br>
+      
+<script type="text/javascript">
+var title2 = "４ｎ＋１型素数";
+var anchor2 = title2.anchor("p2");
+document.write("<h2>",anchor2,"</h2>");
+</script>
+      
+ーーーーーー4n+1型素数ーーーーーー<br>
+      
+４ｎ＋１型素数とは初項１、等差４、の等差数列の中の素数であるものです。<br>
+      
+例えば　(5 13 17 29 37 41 53 61 73 89 97)　です。<br>
+      
+４ｎ＋３型素数は、初項３、等差４の等差数列の中の素数であるものです。<br>
+      
+例えば、(3 7 11 19 23 31 43 47 59 67 71 79 83)　です。<br>
+      
+
+｛４ｎ｝と｛４ｎ＋２｝は偶数になるので、素数は現れません。<br>
+（厳密に言うと、（４ｎ＋２｝に２のみ素数として現れます。）<br>
+<br>
+      
+次の定理があります。<br>
+      
+公差が a である等差数列は、初項を 1 から（a − 1） の間に取るとき、<br>
+その初項が a と互いに素であるものが　φ(a) 通りある。<br>
+（φ(a) はオイラーの　φ関数である。）<br>
+                                                    
+これら　φ(a) 個の等差数列に素数はそれぞれほぼ均等に分布している<br>
+<br>
+      
+ａ＝４のとき　初項１、２，３にとるとき、<br>
+初項が４と素であるものは　１と３の２通りあり、<br>
+φ（４）＝２である。<br>
+      
+
+初項と公差が互いに素である算術級数(等差数列)には無限に素数が存在する、<br>
+という定理をディリクレの算術級数定理と呼ぶそうです。<br>
+
+前置きが長くなりましたが、<br>
+４ｎ＋１型素数　と　４ｎ＋３型素数のどちらに素数が多く属するか、<br>
+Ｒａｃｋｅｔを使って素数の個数をカウントしてみます。<br>
+      
+> (iota 25 1 4)　（４ｎ＋１型の等差数列　項数２５）<br>
+      
+'(1 5 9 13 17 21 25 29 33 37 41 45 49 53 57 61 65 69 73 77 81 85 89 93 97)<br>
+      
+> (filter prime? (iota 25 1 4))<br>
+      
+'(5 13 17 29 37 41 53 61 73 89 97)　　（４ｎ＋１型の素数）<br>
+      
+
+> (iota 25 3 4)　　　（４ｎ＋３型の等差数列）<br>
+      
+'(3 7 11 15 19 23 27 31 35 39 43 47 51 55 59 63 67 71 75 79 83 87 91 95 99)<br>
+      
+> (filter prime? (iota 25 3 4))<br>
+      
+'(3 7 11 19 23 31 43 47 59 67 71 79 83)　　　（４ｎ＋３型の素数）<br>
+      
+
+もう少しきちんとしたコードは次のとおりです。<br>
+      
+<br>
+<pre>
+<font size=5>
+(require (lib "1.ss" "srfi"))<br>
+      
+(require math/number-theory)<br>
+
+(define (prime-list ls)<br>
+  (filter prime? ls))<br>
+
+(define (n-4-1-list n)<br>
+  (iota  n 1 4))　　　　　;;初項１、公差４、項数ｎの等差数列<br>
+      
+(define (n-4-3-list n)<br>
+  (iota  n 3 4))　　　　　;;初項３、公差４、項数ｎの等差数列<br>
+      
+
+
+(define (count ls)<br>
+  (count-sub 0 ls))<br>
+
+(define (count-sub a ls)<br>
+   (cond<br>
+      ((null? ls) a)<br>
+      (else (count-sub (+ 1 a) (cdr ls)))))<br>
+
+(count  (prime-list (n-4-1-list 100)))　－－－－→　３７<br>
+(count  (prime-list (n-4-3-list 100)))　ーーーー→　４０　<br>
+</font>
+</pre>
+<br>
+
+項数をそれぞれ１０００００にすると、<br>
+      
+(count  (prime-list (n-4-1-list 100000)))<br>
+16900<br>
+      
+> (count  (prime-list (n-4-3-list 100000)))<br>
+16959<br>
+      
+
+ほぼ同じ素数の個数になりました。<br>
+           
+      </script>
+      
+ </body>
+
+</html>
